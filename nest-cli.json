@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/cli/src",
+  "monorepo": true,
+  "compilerOptions": {
+    "webpack": true,
+    "webpackConfigPath": "webpack.config.js",
+    "tsConfigPath": "apps/cli/tsconfig.app.json"
+  },
+  "projects": {
+    "cli": {
+      "type": "application",
+      "root": "apps/cli",
+      "entryFile": "main",
+      "sourceRoot": "apps/cli/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/cli/tsconfig.app.json"
+      }
+    },
+    "domain": { "type": "library", "root": "libs/domain", "sourceRoot": "libs/domain/src" },
+    "platform": { "type": "library", "root": "libs/platform", "sourceRoot": "libs/platform/src" },
+    "storage": { "type": "library", "root": "libs/storage", "sourceRoot": "libs/storage/src" },
+    "setup": { "type": "library", "root": "libs/setup", "sourceRoot": "libs/setup/src" },
+    "obs": { "type": "library", "root": "libs/obs", "sourceRoot": "libs/obs/src" },
+    "profiles": { "type": "library", "root": "libs/profiles", "sourceRoot": "libs/profiles/src" },
+    "recording": { "type": "library", "root": "libs/recording", "sourceRoot": "libs/recording/src" },
+    "transcription": { "type": "library", "root": "libs/transcription", "sourceRoot": "libs/transcription/src" },
+    "synthesis": { "type": "library", "root": "libs/synthesis", "sourceRoot": "libs/synthesis/src" },
+    "routing": { "type": "library", "root": "libs/routing", "sourceRoot": "libs/routing/src" },
+    "processing": { "type": "library", "root": "libs/processing", "sourceRoot": "libs/processing/src" },
+    "frame-analysis": { "type": "library", "root": "libs/frame-analysis", "sourceRoot": "libs/frame-analysis/src" }
+  }
+}

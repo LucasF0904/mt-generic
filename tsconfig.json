@@ -1,0 +1,41 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "ES2022",
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "paths": {
+      "@mt/domain": ["libs/domain/src/index.ts"],
+      "@mt/domain/*": ["libs/domain/src/*"],
+      "@mt/platform": ["libs/platform/src/index.ts"],
+      "@mt/platform/*": ["libs/platform/src/*"],
+      "@mt/storage": ["libs/storage/src/index.ts"],
+      "@mt/storage/*": ["libs/storage/src/*"],
+      "@mt/setup": ["libs/setup/src/index.ts"],
+      "@mt/setup/*": ["libs/setup/src/*"],
+      "@mt/obs": ["libs/obs/src/index.ts"],
+      "@mt/obs/*": ["libs/obs/src/*"],
+      "@mt/profiles": ["libs/profiles/src/index.ts"],
+      "@mt/profiles/*": ["libs/profiles/src/*"],
+      "@mt/recording": ["libs/recording/src/index.ts"],
+      "@mt/recording/*": ["libs/recording/src/*"],
+      "@mt/transcription": ["libs/transcription/src/index.ts"],
+      "@mt/transcription/*": ["libs/transcription/src/*"],
+      "@mt/synthesis": ["libs/synthesis/src/index.ts"],
+      "@mt/synthesis/*": ["libs/synthesis/src/*"],
+      "@mt/routing": ["libs/routing/src/index.ts"],
+      "@mt/routing/*": ["libs/routing/src/*"],
+      "@mt/processing": ["libs/processing/src/index.ts"],
+      "@mt/processing/*": ["libs/processing/src/*"],
+      "@mt/frame-analysis": ["libs/frame-analysis/src/index.ts"],
+      "@mt/frame-analysis/*": ["libs/frame-analysis/src/*"]
+    }
+  }
+}

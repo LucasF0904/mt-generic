@@ -1,0 +1,50 @@
+{
+  "name": "mt",
+  "version": "0.1.1",
+  "private": true,
+  "description": "Meeting Transcription — local-first recording, transcription and screen/action correlation.",
+  "scripts": {
+    "build": "nest build cli",
+    "start": "node dist/apps/cli/main.js",
+    "start:cli": "node dist/apps/cli/main.js",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:cov": "vitest run --coverage",
+    "test:package": "node scripts/test-package.cjs",
+    "prepack": "npm run build"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.8.2",
+    "@nestjs/common": "^10.4.0",
+    "@nestjs/core": "^10.4.0",
+    "blessed": "^0.1.81",
+    "nest-commander": "^3.15.0",
+    "obs-websocket-js": "^5.0.6",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.1",
+    "uiohook-napi": "^1.5.5"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^10.4.5",
+    "@nestjs/testing": "^10.4.0",
+    "@swc/core": "^1.7.26",
+    "@types/blessed": "^0.1.27",
+    "@types/node": "^22.5.4",
+    "@vitest/coverage-v8": "^2.1.1",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.6.2",
+    "unplugin-swc": "^1.5.1",
+    "vitest": "^2.1.1"
+  },
+  "bin": {
+    "mt": "bin/mt.cjs"
+  },
+  "files": [
+    "bin/mt.cjs",
+    "dist/apps/cli/main.js"
+  ],
+  "engines": {
+    "node": ">=20"
+  }
+}

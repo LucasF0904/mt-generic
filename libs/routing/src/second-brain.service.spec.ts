@@ -1,0 +1,41 @@
+import { promises as fs } from 'node:fs';
+import * as os from 'node:os';
+import * as path from 'node:path';
+import { afterEach, it, expect } from 'vitest';
+import { Profile, AudioMode, RecordingSession } from '@mt/domain';
+import { SecondBrainService } from './second-brain.service';
+let directory: string;
+afterEach(async () => { if (directory) await fs.rm(directory, { recursive: true, force: true }); });
+it('appends a meeting with file references, preserves the graph and deduplicates retries', async () => {
+  directory = await fs.mkdtemp(path.join(os.tmpdir(), 'mt-graph-test-'));
+  const file = path.join(directory, 'memory.jsonl');
+  const original = JSON.stringify({ type: 'entity', name: 'Project', entityType: 'project', observations: ['existing'] });
+  await fs.writeFile(file, original);
+  const service = new SecondBrainService({ listAvailableProfiles: async () => [new Profile('work', directory, 'Meetings', file)] } as any);
+  const session = new RecordingSession('test-meeting', 'work', 0, AudioMode.Meeting, new Date(), '/video.mkv');
+  expect(await service.register(session, '/report.md', '/audio.txt', 'Decisão registrada')).toBe('registered');
+  expect(await service.register(session, '/report.md', '/audio.txt', 'Decisão registrada')).toBe('already-registered');
+  const content = await fs.readFile(file, 'utf8');
+  expect(content.startsWith(original + '\n')).toBe(true);
+  const lines = content.trim().split('\n').map(line => JSON.parse(line));
+  expect(lines).toHaveLength(2);
+  expect(lines[1]).toMatchObject({ type: 'entity', name: 'mt:test-meeting', entityType: 'meeting' });
+  expect(lines[1].observations.join('\n')).toContain('/audio.txt');
+  expect(lines[1].observations.join('\n')).toContain('/report.md');
+});
+it('does not overwrite malformed memory', async () => {
+  directory = await fs.mkdtemp(path.join(os.tmpdir(), 'mt-graph-test-'));
+  const file = path.join(directory, 'memory.jsonl'); await fs.writeFile(file, 'broken');
+  const service = new SecondBrainService({ listAvailableProfiles: async () => [new Profile('work', undefined, 'Meetings', file)] } as any);
+  await expect(service.register(new RecordingSession('id', 'work', 0, AudioMode.Meeting, new Date(), '/video'), '/r', '/t', '')).rejects.toThrow('JSONL');
+  expect(await fs.readFile(file, 'utf8')).toBe('broken');
+});
+it('skips unconfigured SC and creates an explicitly referenced missing graph', async () => {
+  const session = new RecordingSession('new-meeting', 'work', 0, AudioMode.Meeting, new Date(), '/video');
+  expect(await new SecondBrainService({ listAvailableProfiles: async () => [] } as any).register(session, '/report', '/audio', '')).toBe('no-profile-memory');
+  directory = await fs.mkdtemp(path.join(os.tmpdir(), 'mt-graph-test-'));
+  const graph = path.join(directory, 'memory.jsonl');
+  const service = new SecondBrainService({ listAvailableProfiles: async () => [new Profile('work', undefined, 'Meetings', graph)] } as any);
+  expect(await service.register(session, '/report', '/audio', '')).toBe('registered');
+  expect(JSON.parse((await fs.readFile(graph, 'utf8')).trim()).name).toBe('mt:new-meeting');
+});
